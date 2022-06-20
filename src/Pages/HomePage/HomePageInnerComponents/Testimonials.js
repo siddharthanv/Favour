@@ -44,8 +44,8 @@ export default function Testimonials() {
           removeArrowOnDeviceType={["tablet", "mobile", "superLargeDesktop", "desktop"]}
           itemClass="padding-left: 25px"
         >
-          {[...new Array(5)].map(() => (
-            <Card sx={{ mx: "10px", height: "98%" }}>
+          {[...new Array(5)].map((_test, index) => (
+            <Card sx={{ mx: "10px", height: "98%" }} key={index}>
               <CardContent>
                 <Stack direction="row" justifyContent="center">
                   <Avatar alt="Remy Sharp" src={faker.internet.avatar()} sx={{ width: 70, height: 70 }} />

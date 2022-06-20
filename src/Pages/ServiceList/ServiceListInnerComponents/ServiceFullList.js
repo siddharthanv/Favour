@@ -24,8 +24,8 @@ export default function Services() {
           Services List
         </Typography>
         <Grid container spacing={4}>
-          {popularServices.map((ser) => (
-            <Grid item xs={4} sm={3} md={2.4} lg={2}>
+          {popularServices.map((ser, index) => (
+            <Grid item xs={4} sm={3} md={2.4} lg={2} key={index}>
               <Link to="/service-person-list" style={{ textDecoration: "none", color: "#000" }}>
                 <div
                   style={{

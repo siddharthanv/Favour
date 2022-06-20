@@ -24,6 +24,8 @@ import AppShortcutIcon from "@mui/icons-material/AppShortcut";
 import LaptopChromebookIcon from "@mui/icons-material/LaptopChromebook";
 import HomeIcon from "@mui/icons-material/Home";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
+import AccountPopover from "./AccountPopover";
+import { Stack, Typography } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -82,36 +84,72 @@ export default function PersistentDrawerLeft() {
     setOpen(false);
   };
 
+  // const loggedIn = localStorage.getItem("data");
+  // const UserCheck = localStorage.getItem("data") && JSON.parse(localStorage.getItem("data")).userType;
+  // let normalUserCheck = false;
+  // let ServicePersonCheck = false;
+
+  // if (UserCheck === "Normal User") {
+  //   normalUserCheck = true;
+  //   ServicePersonCheck = false;
+  // } else {
+  //   normalUserCheck = false;
+  //   ServicePersonCheck = true;
+  // }
+
+  const loggedIn = true;
+  const UserCheck = true;
+  let normalUserCheck = true;
+  let ServicePersonCheck = true;
+
+  if (UserCheck === "Normal User") {
+    normalUserCheck = true;
+    ServicePersonCheck = true;
+  } else {
+    normalUserCheck = true;
+    ServicePersonCheck = true;
+  }
+
   const navbarOptions = [
     {
       id: "0",
       name: "Home",
       linkURL: "/",
       icon: <HomeIcon />,
+      show1: true,
+      show2: true,
     },
     {
       id: "1",
       name: "Services",
       linkURL: "/service-list",
       icon: <HomeRepairServiceIcon />,
+      show1: loggedIn,
+      show2: normalUserCheck,
     },
     {
       id: "2",
       name: "Service Persons",
       linkURL: "/service-person-list",
       icon: <PersonIcon />,
+      show1: loggedIn,
+      show2: normalUserCheck,
     },
     {
       id: "3",
       name: "My Bookings",
       linkURL: "/my-bookings",
       icon: <AppShortcutIcon />,
+      show1: loggedIn,
+      show2: normalUserCheck,
     },
     {
       id: "4",
       name: "My Bookings (Partners)",
       linkURL: "/partner-bookings",
       icon: <LaptopChromebookIcon />,
+      show1: loggedIn,
+      show2: ServicePersonCheck,
     },
   ];
 
@@ -129,6 +167,8 @@ export default function PersistentDrawerLeft() {
       icon: <VpnKeyIcon />,
     },
   ];
+
+  const userData = JSON.parse(localStorage.getItem("data"));
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -149,11 +189,15 @@ export default function PersistentDrawerLeft() {
           <Box display="flex" flexGrow={1}>
             <Logo />
           </Box>
-          <Link to="/signin" style={{ textDecoration: "none" }}>
-            <Button variant="contained" size="small">
-              Login
-            </Button>
-          </Link>
+          {userData ? (
+            <AccountPopover />
+          ) : (
+            <Link to="/signin" style={{ textDecoration: "none" }}>
+              <Button variant="contained" size="small">
+                Login
+              </Button>
+            </Link>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -174,32 +218,39 @@ export default function PersistentDrawerLeft() {
             {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
+
         <Divider />
         <List>
-          {navbarOptions.map((opt, index) => (
+          {navbarOptions.map((opt) => (
             <Link to={opt.linkURL} key={opt.id} style={{ textDecoration: "none", color: "inherit" }}>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>{opt.icon}</ListItemIcon>
-                  <ListItemText primary={opt.name} />
-                </ListItemButton>
-              </ListItem>
+              {opt.show1 && opt.show2 && (
+                <ListItem disablePadding>
+                  <ListItemButton>
+                    <ListItemIcon>{opt.icon}</ListItemIcon>
+                    <ListItemText primary={opt.name} />
+                  </ListItemButton>
+                </ListItem>
+              )}
             </Link>
           ))}
         </List>
-        <Divider />
-        <List>
-          {navbar1Options.map((opt, index) => (
-            <Link to={opt.linkURL} key={opt.id} style={{ textDecoration: "none", color: "inherit" }}>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>{opt.icon}</ListItemIcon>
-                  <ListItemText primary={opt.name} />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-          ))}
-        </List>
+        {!localStorage.getItem("data") && (
+          <Stack>
+            <Divider />
+            <List>
+              {navbar1Options.map((opt) => (
+                <Link to={opt.linkURL} key={opt.id} style={{ textDecoration: "none", color: "inherit" }}>
+                  <ListItem disablePadding>
+                    <ListItemButton>
+                      <ListItemIcon>{opt.icon}</ListItemIcon>
+                      <ListItemText primary={opt.name} />
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
+              ))}
+            </List>
+          </Stack>
+        )}
       </Drawer>
       <Main open={open} sx={{ pl: "0px !important", pt: "0px !important" }}>
         <DrawerHeader />
