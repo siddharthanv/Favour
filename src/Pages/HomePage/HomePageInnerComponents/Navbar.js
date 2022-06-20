@@ -84,31 +84,31 @@ export default function PersistentDrawerLeft() {
     setOpen(false);
   };
 
-  // const loggedIn = localStorage.getItem("data");
-  // const UserCheck = localStorage.getItem("data") && JSON.parse(localStorage.getItem("data")).userType;
-  // let normalUserCheck = false;
-  // let ServicePersonCheck = false;
-
-  // if (UserCheck === "Normal User") {
-  //   normalUserCheck = true;
-  //   ServicePersonCheck = false;
-  // } else {
-  //   normalUserCheck = false;
-  //   ServicePersonCheck = true;
-  // }
-
-  const loggedIn = true;
-  const UserCheck = true;
-  let normalUserCheck = true;
-  let ServicePersonCheck = true;
+  const loggedIn = localStorage.getItem("data");
+  const UserCheck = localStorage.getItem("data") && JSON.parse(localStorage.getItem("data")).userType;
+  let normalUserCheck = false;
+  let ServicePersonCheck = false;
 
   if (UserCheck === "Normal User") {
     normalUserCheck = true;
-    ServicePersonCheck = true;
+    ServicePersonCheck = false;
   } else {
-    normalUserCheck = true;
+    normalUserCheck = false;
     ServicePersonCheck = true;
   }
+
+  // const loggedIn = true;
+  // const UserCheck = true;
+  // let normalUserCheck = true;
+  // let ServicePersonCheck = true;
+
+  // if (UserCheck === "Normal User") {
+  //   normalUserCheck = true;
+  //   ServicePersonCheck = true;
+  // } else {
+  //   normalUserCheck = true;
+  //   ServicePersonCheck = true;
+  // }
 
   const navbarOptions = [
     {

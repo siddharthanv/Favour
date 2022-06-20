@@ -68,6 +68,7 @@ export default function Signup() {
         aadhar: "000000000000",
         pan: "ABCDEFGH",
         userStatus: "ACTIVE",
+        pincodeMapping: [],
       };
 
       await axiosIn

@@ -1,5 +1,20 @@
 import * as Yup from "yup";
-import { Button, Container, Stack, Typography, TextField, Box, Grid } from "@mui/material";
+import {
+  Button,
+  Container,
+  Stack,
+  Typography,
+  TextField,
+  Box,
+  Grid,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  ListItemText,
+  Select,
+  Checkbox,
+  OutlinedInput,
+} from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import React, { useState } from "react";
@@ -8,7 +23,32 @@ import LogoOnlyLayout from "../../Common/Layout/LogoOnlyLayout";
 import { Form, FormikProvider, useFormik } from "formik";
 import axiosIn from "../../utils/apiBaseUrl/axiosApi";
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const names = [600001, 600002, 600003, 600004, 600005, 600006, 600007, 600008, 600009, 600010];
+
 export default function BecomeAnPartner() {
+  const [personName, setPersonName] = React.useState([600001, 600002]);
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
+
   const [errorMessage, setErrorMessage] = useState(null);
   const gender = [
     { id: 1, name: "Male", value: "MALE" },
@@ -85,6 +125,7 @@ export default function BecomeAnPartner() {
         aadhar: values.aadhar,
         pan: values.pan,
         userStatus: "ACTIVE",
+        pincodeMapping: personName,
       };
 
       await axiosIn
@@ -268,6 +309,30 @@ export default function BecomeAnPartner() {
                     error={Boolean(touched.pan && errors.pan)}
                     helperText={touched.pan && errors.pan}
                   />
+                </Grid>
+
+                <Grid item lg={12}>
+                  <FormControl sx={{ width: "100%" }}>
+                    <InputLabel id="demo-multiple-checkbox-label">Pincode</InputLabel>
+                    <Select
+                      fullWidth
+                      labelId="demo-multiple-checkbox-label"
+                      id="demo-multiple-checkbox"
+                      multiple
+                      value={personName}
+                      onChange={handleChange}
+                      input={<OutlinedInput label="Pincode" />}
+                      renderValue={(selected) => selected.join(", ")}
+                      MenuProps={MenuProps}
+                    >
+                      {names.map((name) => (
+                        <MenuItem key={name} value={name}>
+                          <Checkbox checked={personName.indexOf(name) > -1} />
+                          <ListItemText primary={name} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
 
                 <Grid item lg={12}>

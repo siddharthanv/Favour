@@ -1,21 +1,64 @@
 import { Box, Button, Card, CardContent, Container, Divider, Grid, Stack, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import HirePerson from "./HirePerson";
+import axiosIn from "../../../utils/apiBaseUrl/axiosApi";
 
 export default function HireLayout() {
+  const [servicePerson, setServicePerson] = useState({});
+  const [checkPincode, setCheckPincode] = useState(false);
+  const [showStatus, setShowStatus] = useState(false);
+
+  useEffect(() => {
+    const getServicePerson = async () => {
+      await axiosIn
+        .get("auth/getServicePersonsList?userType=Service Person")
+        .then((res) => {
+          const found = res.data.filter((res) => res.id === localStorage.getItem("currentId"));
+          setServicePerson(found[0]);
+        })
+        .catch((res) => console.log(res));
+    };
+
+    getServicePerson();
+  }, []);
+
+  const checkAndChangeStatus = () => {
+    setShowStatus(true);
+  };
+
   return (
     <Grid container spacing={2}>
       <Grid item lg={6} sx={{ mt: "50px" }}>
         <Container maxWidth="xs">
-          <HirePerson />
+          <HirePerson ser={servicePerson} />
           <Card sx={{ mt: "30px" }}>
             <CardContent>
               <Typography sx={{ fontWeight: 600 }}>Check Availability with Pincode</Typography>
               <Box display="flex">
-                <TextField fullWidth label="Enter your pincode" size="small" sx={{ mt: "20px" }} />
-                <Button size="small" variant="contained" sx={{ textTransform: "none", m: "20px 0px 0px 20px" }}>
+                <TextField
+                  fullWidth
+                  label="Enter your pincode"
+                  size="small"
+                  sx={{ mt: "20px" }}
+                  onChange={(e) => {
+                    setShowStatus(false);
+                    setCheckPincode(servicePerson.pincodeMapping.includes(e.target.value));
+                  }}
+                />
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={checkAndChangeStatus}
+                  sx={{ textTransform: "none", m: "20px 0px 0px 20px" }}
+                >
                   Check
                 </Button>
               </Box>
+              {showStatus && (
+                <Typography color={checkPincode ? "green" : "red"} sx={{ mt: "10px" }}>
+                  {checkPincode ? "Available for your pincode" : "Not available for your pincode"}
+                </Typography>
+              )}
             </CardContent>
           </Card>
         </Container>

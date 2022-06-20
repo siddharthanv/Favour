@@ -8,11 +8,12 @@ import Contactus from "./HomePageInnerComponents/Contactus";
 import Footer from "../../Common/Footer/Footer";
 
 export default function HomePage() {
+  const UserCheck = localStorage.getItem("data");
   return (
     <>
       <Navbar />
       <Banner />
-      <Services />
+      {UserCheck && <Services />}
       <ChoseUs />
       <Testimonials />
       <Contactus />

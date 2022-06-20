@@ -19,10 +19,10 @@ const OverlayStyle = styled("div")(({ theme }) => ({
   position: "absolute",
 }));
 
-export default function HirePerson() {
-  // const { name, cover, position, follower, totalPost, avatarUrl, following } = user;
-  const name = "Alex";
-  const position = "Doctor";
+export default function HirePerson({ ser }) {
+  const { firstName, skillType, id } = ser;
+  const name = firstName;
+  const position = skillType;
   const follower = "5";
   const following = "12";
   const cover = faker.internet.avatar();

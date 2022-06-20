@@ -28,11 +28,11 @@ ServicePersonCard.propTypes = {
 };
 
 export default function ServicePersonCard({ user }) {
-  // const { name, cover, position, follower, totalPost, avatarUrl, following } = user;
-  const name = "Alex";
-  const position = "Doctor";
-  const follower = "12";
-  const following = "12";
+  const { firstName, skillType, id } = user;
+  const name = firstName;
+  const position = skillType;
+  const follower = Math.floor(Math.random() * 2) + 3;
+  const following = Math.floor(Math.random() * 50) + 10;
   const cover = faker.internet.avatar();
   const avatarUrl = faker.internet.avatar();
 
@@ -99,7 +99,14 @@ export default function ServicePersonCard({ user }) {
         <div>
           <Box display="flex" alignItems="center" sx={{ height: "100%" }} justifyContent="center">
             <Link to="/hire" style={{ textDecoration: "none" }}>
-              <Button variant="outlined" size="small" sx={{ color: "#000", borderColor: "#000" }}>
+              <Button
+                onClick={() => {
+                  localStorage.setItem("currentId", id);
+                }}
+                variant="outlined"
+                size="small"
+                sx={{ color: "#000", borderColor: "#000" }}
+              >
                 Hire
               </Button>
             </Link>

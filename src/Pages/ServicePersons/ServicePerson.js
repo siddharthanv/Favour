@@ -1,9 +1,22 @@
 import { Container, Grid, Stack, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axiosIn from "../../utils/apiBaseUrl/axiosApi";
 import Navbar from "../HomePage/HomePageInnerComponents/Navbar";
 import ServicePersonCard from "./ServicePersonComponents/ServicePersonCard";
 
 export default function ServicePerson() {
+  const [servicePerson, setServicePerson] = useState([]);
+
+  useEffect(() => {
+    const getServicePerson = async () => {
+      await axiosIn
+        .get("auth/getServicePersonsList?userType=Service Person")
+        .then((res) => setServicePerson(res.data))
+        .catch((res) => console.log(res));
+    };
+
+    getServicePerson();
+  }, []);
   return (
     <div>
       <Navbar />
@@ -19,9 +32,9 @@ export default function ServicePerson() {
           />
         </Stack>
         <Grid container spacing={4}>
-          {[...new Array(12)].map(() => (
-            <Grid item lg={4}>
-              <ServicePersonCard />
+          {servicePerson.map((per, index) => (
+            <Grid item lg={4} key={index}>
+              <ServicePersonCard user={per} />
             </Grid>
           ))}
         </Grid>
